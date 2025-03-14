@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { EffectCards } from "swiper/modules";
 import "swiper/css";
@@ -6,12 +6,12 @@ import "swiper/css/effect-cards";
 import "./MusicPlayer.css";
 
 const MusicPlayer = () => {
-  const songs = [
-    { id: 1, title: "Dreamy Nights", image: "card-img-1.jpg" },
-    { id: 2, title: "Midnight Groove", image: "card-img-2.jpg" },
-    { id: 3, title: "Summer Breeze", image: "card-img-3.jpg" },
-    { id: 4, title: "Midnight Groove", image: "card-img-4.jpg" },
-  ];
+  const [songs, setSongs] = useState([
+    { id: 1, title: "Dreamy Nights", singer: "Luna Vox", image: "card-img-1.jpg", duration: "3:45", isFavorite: false },
+    { id: 2, title: "Midnight Groove", singer: "Stellar Beats", image: "card-img-2.jpg", duration: "4:12", isFavorite: false },
+    { id: 3, title: "Summer Breeze", singer: "Solar Tunes", image: "card-img-3.jpg", duration: "3:30", isFavorite: false },
+    { id: 4, title: "Midnight Groove", singer: "Echo Pulse", image: "card-img-4.jpg", duration: "4:00", isFavorite: false },
+  ]);
 
   const importAll = (r) => {
     let images = {};
@@ -22,6 +22,12 @@ const MusicPlayer = () => {
   };
 
   const images = importAll(require.context("../assets", false, /\.(png|jpe?g|svg)$/));
+
+  const toggleFavorite = (id) => {
+    setSongs(songs.map(song =>
+      song.id === id ? { ...song, isFavorite: !song.isFavorite } : song
+    ));
+  };
 
   return (
     <div className="music-player">
@@ -52,7 +58,22 @@ const MusicPlayer = () => {
             </Swiper>
           </div>
           <div className="controls-column">
-            <h1>My Music Player</h1>
+            {songs.map((song, index) => (
+              <div key={song.id} className={`song-row ${index === 0 ? 'active-song' : ''}`}>
+                <img src={images[song.image]} alt={song.title} className="row-thumbnail" />
+                <div className="song-info">
+                  <div className="song-title-row">{song.title}</div>
+                  <div className="singer-name">{song.singer}</div>
+                </div>
+                <div className="song-meta">
+                  <span className="song-duration">{song.duration}</span>
+                  <i
+                    className={`heart-icon ${song.isFavorite ? 'fas fa-heart' : 'far fa-heart'}`}
+                    onClick={() => toggleFavorite(song.id)}
+                  ></i>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
