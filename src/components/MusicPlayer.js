@@ -1,20 +1,16 @@
 import React from "react";
-import background from "../assets/background-img.jpg";
+import "./MusicPlayer.css"; // Import CSS file
 
 const MusicPlayer = () => {
   return (
-    <div
-      style={{
-        backgroundImage: `url(${background})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        width: "100vw",
-        height: "100vh",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
+    <div className="music-player">
+      {/* Blurred Container */}
+      <div className="player-container">
+        {/* Moving Bubbles */}
+        <div className="bubble blue-bubble"></div>
+        <div className="bubble pink-bubble"></div>
+        <h1>My Music Player</h1>
+      </div>
     </div>
   );
 };
