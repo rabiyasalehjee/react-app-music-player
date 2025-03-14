@@ -208,23 +208,29 @@
         gap: 30px;
     }
 
+    .card-stack-column {
+        justify-content: center;
+    }
+
     .swiper {
-        width: 200px;
-        height: 280px;
+        width: 180px;
+        height: 260px;
+        margin: 0 auto; 
     }
 
     .swiper-slide {
-        padding: 10px;
+        padding: 8px;
     }
 
     .song-title {
         height: 50px;
-        font-size: 1.2rem;
+        font-size: 1.1rem;
         padding: 5px 8px;
     }
-.controls-column {
-    padding: 0 10px;
-}
+
+    .controls-column {
+        padding: 0 10px;
+    }
 
     .song-row {
         padding: 12px 16px;
