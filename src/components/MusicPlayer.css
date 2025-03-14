@@ -29,7 +29,7 @@
 .player-grid {
     display: grid;
     grid-template-columns: 1fr 2fr;
-    gap: 20px;
+    gap: 70px;
     height: 100%;
     width: 100%;
 }
@@ -88,7 +88,7 @@
     flex-direction: column;
     justify-content: center;
     gap: 10px;
-    padding: 0 90px;
+    padding: 0 20px;
     color: white;
 }
 
@@ -205,7 +205,7 @@
 
     .player-grid {
         grid-template-columns: 1fr;
-        gap: 10px;
+        gap: 30px;
     }
 
     .swiper {
@@ -222,14 +222,18 @@
         font-size: 1.2rem;
         padding: 5px 8px;
     }
+.controls-column {
+    padding: 0 10px;
+}
 
     .song-row {
         padding: 12px 16px;
     }
 
     .row-thumbnail {
-        width: 80px;
-        height: 80px;
+        width: 50px;
+        height: 50px;
+        margin-right: 10px;
     }
 
     .song-title-row {
@@ -242,15 +246,15 @@
     }
 
     .song-duration {
-        font-size: 1rem;
+        font-size: 0.9rem;
     }
 
     .song-meta {
-        gap: 30px;
+        gap: 15px;
     }
 
     .heart-icon {
-        font-size: 0.9rem;
+        font-size: 0.8rem;
     }
 
     .bubble {

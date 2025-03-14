@@ -13,6 +13,8 @@ const MusicPlayer = () => {
     { id: 4, title: "Midnight Groove", singer: "Echo Pulse", image: "card-img-4.jpg", duration: "4:00", isFavorite: false },
   ]);
 
+  const [activeIndex, setActiveIndex] = useState(0); // Track the active slide index
+
   const importAll = (r) => {
     let images = {};
     r.keys().forEach((item) => {
@@ -48,6 +50,7 @@ const MusicPlayer = () => {
               speed={700}
               initialSlide={0}
               className="swiper"
+              onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)} // Update active index on slide change
             >
               {songs.map((song) => (
                 <SwiperSlide key={song.id} className="swiper-slide">
@@ -59,7 +62,10 @@ const MusicPlayer = () => {
           </div>
           <div className="controls-column">
             {songs.map((song, index) => (
-              <div key={song.id} className={`song-row ${index === 0 ? 'active-song' : ''}`}>
+              <div
+                key={song.id}
+                className={`song-row ${index === activeIndex ? 'active-song' : ''}`} // Apply active-song based on activeIndex
+              >
                 <img src={images[song.image]} alt={song.title} className="row-thumbnail" />
                 <div className="song-info">
                   <div className="song-title-row">{song.title}</div>
