@@ -19,6 +19,5 @@ In the project directory, you can run:
 - React: Frontend library for building the UI.
 - Swiper.js: Handles the card-stack carousel effect.
 - CSS: Custom styles in `MusicPlayer.css` for layout and animations.
-- Font Awesome: Icons for controls and favorites.
 
 ![Music Player UI Preview](ui-preview.png)
