@@ -19,6 +19,7 @@ const MusicPlayer = () => {
   const [isShuffle, setIsShuffle] = useState(false);
   const [volume, setVolume] = useState(100);
   const [progress, setProgress] = useState(0);
+  const [isMuted, setIsMuted] = useState(false); // Add this line
 
   const audioRef = useRef(null);
   const songRowRefs = useRef([]);
@@ -80,6 +81,9 @@ const MusicPlayer = () => {
     const newVolume = e.target.value;
     setVolume(newVolume);
     audioRef.current.volume = newVolume / 100;
+    if (isMuted) {
+      setIsMuted(false); // Unmute when volume is adjusted
+    }
   };
 
   const handleProgressChange = (e) => {
@@ -92,6 +96,17 @@ const MusicPlayer = () => {
     const currentTime = audioRef.current.currentTime;
     const duration = audioRef.current.duration;
     setProgress((currentTime / duration) * 100);
+  };
+
+  const toggleMute = () => {
+    if (isMuted) {
+      // Unmute and restore previous volume
+      audioRef.current.volume = volume / 100;
+    } else {
+      // Mute and save current volume
+      audioRef.current.volume = 0;
+    }
+    setIsMuted(!isMuted);
   };
 
   return (
@@ -148,7 +163,7 @@ const MusicPlayer = () => {
           </div>
         </div>
 
-        {}
+        {/* Player Controls */}
         <div className="player">
           <audio
             ref={audioRef}
@@ -167,13 +182,16 @@ const MusicPlayer = () => {
             </button>
             <i className="fa-solid fa-forward" onClick={() => setActiveIndex((prev) => (prev < songs.length - 1 ? prev + 1 : 0))}></i>
             <div className="volume">
-              <i className="fa-solid fa-volume-high"></i>
+              <i
+                className={`fa-solid ${isMuted ? 'fa-volume-mute' : 'fa-volume-high'}`}
+                onClick={toggleMute}
+              ></i>
               <input
                 type="range"
                 id="volume-range"
                 min="0"
                 max="100"
-                value={volume}
+                value={isMuted ? 0 : volume} // Set volume to 0 when muted
                 onChange={handleVolumeChange}
               />
             </div>
