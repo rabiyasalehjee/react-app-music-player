@@ -11,9 +11,13 @@ const MusicPlayer = () => {
     { id: 2, title: "Midnight Groove", singer: "Stellar Beats", image: "card-img-2.jpg", duration: "4:12", isFavorite: false },
     { id: 3, title: "Summer Breeze", singer: "Solar Tunes", image: "card-img-3.jpg", duration: "3:30", isFavorite: false },
     { id: 4, title: "Midnight Groove", singer: "Echo Pulse", image: "card-img-4.jpg", duration: "4:00", isFavorite: false },
+    { id: 5, title: "Midnight Groove", singer: "Echo Pulse", image: "card-img-4.jpg", duration: "4:00", isFavorite: false },
+    { id: 6, title: "Midnight Groove", singer: "Echo Pulse", image: "card-img-4.jpg", duration: "4:00", isFavorite: false },
+    { id: 7, title: "Midnight Groove", singer: "Echo Pulse", image: "card-img-4.jpg", duration: "4:00", isFavorite: false },
+    { id: 8, title: "Midnight Groove", singer: "Echo Pulse", image: "card-img-4.jpg", duration: "4:00", isFavorite: false },
   ]);
 
-  const [activeIndex, setActiveIndex] = useState(0); // Track the active slide index
+  const [activeIndex, setActiveIndex] = useState(0); 
 
   const importAll = (r) => {
     let images = {};
@@ -50,7 +54,7 @@ const MusicPlayer = () => {
               speed={700}
               initialSlide={0}
               className="swiper"
-              onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)} // Update active index on slide change
+              onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)} 
             >
               {songs.map((song) => (
                 <SwiperSlide key={song.id} className="swiper-slide">
@@ -64,7 +68,7 @@ const MusicPlayer = () => {
             {songs.map((song, index) => (
               <div
                 key={song.id}
-                className={`song-row ${index === activeIndex ? 'active-song' : ''}`} // Apply active-song based on activeIndex
+                className={`song-row ${index === activeIndex ? 'active-song' : ''}`} 
               >
                 <img src={images[song.image]} alt={song.title} className="row-thumbnail" />
                 <div className="song-info">

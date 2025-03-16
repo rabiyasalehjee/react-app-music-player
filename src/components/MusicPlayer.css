@@ -86,11 +86,17 @@
 .controls-column {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 10px;
     padding: 0 20px;
     color: white;
+    overflow-y: auto;
+    height: 100%;
 }
+.controls-column::-webkit-scrollbar {
+    display: none; 
+}
+
 
 .song-row {
     display: flex;
@@ -98,6 +104,7 @@
     padding: 15px 20px;
     transition: background 0.3s ease;
     border-bottom: 2px solid #6490f6;
+    flex-shrink: 0;
 }
 
 .song-row.active-song {
@@ -205,7 +212,9 @@
 
     .player-grid {
         grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr;
         gap: 30px;
+        height: 100%;
     }
 
     .card-stack-column {
@@ -215,7 +224,7 @@
     .swiper {
         width: 180px;
         height: 260px;
-        margin: 0 auto; 
+        margin: 0 auto;
     }
 
     .swiper-slide {
@@ -229,11 +238,11 @@
     }
 
     .controls-column {
-        padding: 0 10px;
+        padding: 0px 5px;
     }
 
     .song-row {
-        padding: 12px 16px;
+        padding: 15px 10px;
     }
 
     .row-thumbnail {
