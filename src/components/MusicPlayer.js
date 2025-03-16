@@ -9,7 +9,7 @@ const MusicPlayer = () => {
   const [songs, setSongs] = useState([
     { id: 1, title: "Dreamy Nights", singer: "Luna Vox", image: "card-img-1.jpg", duration: "3:45", isFavorite: false },
     { id: 2, title: "Midnight Groove", singer: "Stellar Beats", image: "card-img-2.jpg", duration: "4:12", isFavorite: false },
-    { id: 3, title: "Summer Breeze", singer: "Solar Tunes", image: "card-img-3.jpg", duration: "3:30", isFavorite: false },
+    { id: 3, title: "Summer Breeze", singer: "Solar Tunes", image: "card-img-3.jpg", duration: "3:30", isFavorite: true },
     { id: 4, title: "Starlight Serenade", singer: "Echo Pulse", image: "card-img-4.jpg", duration: "4:00", isFavorite: false },
     { id: 5, title: "Neon Dreams", singer: "Synthwave Collective", image: "card-img-5.jpg", duration: "4:10", isFavorite: false },
   ]);
@@ -41,7 +41,12 @@ const MusicPlayer = () => {
     ));
   };
 
+  
   useEffect(() => {
+    if (swiperRef.current) {
+      swiperRef.current.slideTo(activeIndex);
+    }
+
     const activeRow = songRowRefs.current[activeIndex];
     if (activeRow) {
       const timeoutId = setTimeout(() => {
@@ -62,6 +67,11 @@ const MusicPlayer = () => {
     setTimeout(() => {
       setActiveIndex(swiper.activeIndex);
     }, 100);
+  };
+
+  
+  const handleRowClick = (index) => {
+    setActiveIndex(index);
   };
 
   const togglePlayPause = () => {
@@ -100,10 +110,8 @@ const MusicPlayer = () => {
 
   const toggleMute = () => {
     if (isMuted) {
-
       audioRef.current.volume = volume / 100;
     } else {
-
       audioRef.current.volume = 0;
     }
     setIsMuted(!isMuted);
@@ -145,6 +153,8 @@ const MusicPlayer = () => {
                 key={song.id}
                 ref={(el) => (songRowRefs.current[index] = el)}
                 className={`song-row ${index === activeIndex ? 'active-song' : ''}`}
+                onClick={() => handleRowClick(index)} 
+                style={{ cursor: "pointer" }} 
               >
                 <img src={images[song.image]} alt={song.title} className="row-thumbnail" />
                 <div className="song-info">
@@ -155,7 +165,10 @@ const MusicPlayer = () => {
                   <span className="song-duration">{song.duration}</span>
                   <i
                     className={`heart-icon ${song.isFavorite ? 'fas fa-heart' : 'far fa-heart'}`}
-                    onClick={() => toggleFavorite(song.id)}
+                    onClick={(e) => {
+                      e.stopPropagation(); 
+                      toggleFavorite(song.id);
+                    }}
                   ></i>
                 </div>
               </div>
@@ -163,7 +176,6 @@ const MusicPlayer = () => {
           </div>
         </div>
 
-        { }
         <div className="player">
           <audio
             ref={audioRef}

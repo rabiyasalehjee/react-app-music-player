@@ -40,20 +40,20 @@
     border: 1px solid var(--white-transparent);
     border-radius: 15px;
     box-shadow: 0 0.5px 0 1px var(--white-semi-transparent) inset,
-        0 1px 0 0 var(--white-mostly-transparent) inset, 
+        0 1px 0 0 var(--white-mostly-transparent) inset,
         0 4px 16px var(--black-transparent);
     position: relative;
     overflow: hidden;
     display: flex;
-    flex-direction: column; 
+    flex-direction: column;
 }
 
 .player-grid {
     display: grid;
     grid-template-columns: 1fr 2fr;
     gap: 70px;
-    flex: 1; 
-    overflow: hidden; 
+    flex: 1;
+    overflow: hidden;
 }
 
 .card-stack-column {
@@ -73,7 +73,7 @@
     border-radius: 12px;
     background: var(--card-bg);
     box-shadow: 0 0.5px 0 1px var(--white-semi-transparent) inset,
-        0 1px 0 0 var(--white-mostly-transparent) inset, 
+        0 1px 0 0 var(--white-mostly-transparent) inset,
         0 4px 16px var(--black-transparent);
     padding: 15px;
     user-select: none;
@@ -113,9 +113,10 @@
     gap: 10px;
     padding: 0 20px;
     color: var(--white);
-    overflow-y: auto; 
-    max-height: calc(100% - 30px); 
+    overflow-y: auto;
+    max-height: calc(100% - 30px);
 }
+
 .controls-column::-webkit-scrollbar {
     width: 7px;
 }
@@ -232,6 +233,7 @@
     0% {
         left: -75px;
     }
+
     100% {
         left: calc(100% - 75px);
     }
@@ -241,6 +243,7 @@
     0% {
         right: -75px;
     }
+
     100% {
         right: calc(100% - 75px);
     }
@@ -328,10 +331,12 @@
     .pink-bubble {
         right: -50px;
     }
+
     @keyframes moveBubbleRight {
         0% {
             left: -50px;
         }
+
         100% {
             left: calc(100% - 50px);
         }
@@ -341,11 +346,13 @@
         0% {
             right: -50px;
         }
+
         100% {
             right: calc(100% - 50px);
         }
     }
 }
+
 .player {
     position: sticky;
     bottom: 0;
@@ -361,85 +368,88 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    flex-shrink: 0; 
+    flex-shrink: 0;
 }
-  
-  .controls {
+
+.controls {
     display: flex;
     justify-content: center;
     align-items: center;
     column-gap: 25px;
     padding: 10px;
-  }
-  
-  .controls i {
+}
+
+.controls i {
     font-size: 1.7rem;
     cursor: pointer;
-    color: #e5e5e5; 
-  }
-  
-  .controls button {
+    color: #e5e5e5;
+}
+
+.controls button {
     display: flex;
     align-items: center;
     justify-content: center;
     width: 45px;
     height: 45px;
-    background: #e5e5e5; 
+    background: #e5e5e5;
     border: 2px solid rgba(255, 255, 255, 0.3);
     border-radius: 50%;
     box-shadow: 0 10px 20px rgba(5, 36, 28, 0.3);
     cursor: pointer;
     transition: transform 0.2s ease;
-  }
-  
-  .controls button i {
-    color: #6490f6; 
-    font-size: 1.5rem; 
-  }
-  
-  .controls button:hover {
-    transform: scale(1.05);
-  }
+}
 
- #playPauseBtn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 45px;
-  height: 45px;
-  background: #e5e5e5; 
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-radius: 50%;
-  box-shadow: 0 10px 20px rgba(5, 36, 28, 0.3);
-  cursor: pointer;
-  transition: transform 0.2s ease;
+.controls button i {
+    color: #6490f6;
+    font-size: 1.5rem;
+}
+
+.controls button:hover {
+    transform: scale(1.05);
+}
+
+#playPauseBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 45px;
+    height: 45px;
+    background: #e5e5e5;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    box-shadow: 0 10px 20px rgba(5, 36, 28, 0.3);
+    cursor: pointer;
+    transition: transform 0.2s ease;
 }
 
 #playPauseBtn i {
-  color: #6490f6; 
-  font-size: 1.5rem; 
+    color: #6490f6;
+    font-size: 1.5rem;
 }
 
 #playPauseBtn:hover {
-  transform: scale(1.05);
-}
-  
-  #shuffleBtn:hover,
-  #prevBtn:hover,
-  #nextBtn:hover,
-  #playPauseBtn:hover {
     transform: scale(1.05);
-  }
-  .volume {
+}
+
+#shuffleBtn:hover,
+#prevBtn:hover,
+#nextBtn:hover,
+#playPauseBtn:hover {
+    transform: scale(1.05);
+}
+
+.volume {
     position: relative;
     display: flex;
     align-items: center;
-  }
-  .volume i {
+}
+
+.volume i {
     color: var(--light-clr);
     font-size: 1.2rem;
-  }
-  .volume input {
+}
+
+.volume input {
     position: absolute;
     left: 30px;
     width: 120px;
@@ -448,68 +458,70 @@
     border-radius: 4px;
     cursor: pointer;
     appearance: none;
-  }
-  
-  .volume input::-webkit-slider-thumb {
+}
+
+.volume input::-webkit-slider-thumb {
     appearance: none;
     background: #e5e5e5;
     width: 12px;
     height: 12px;
     border-radius: 50%;
-  }
+}
 
-  #progress-bar {
+#progress-bar {
     appearance: none;
-    width: 90%; 
+    width: 90%;
     height: 5px;
-    background: linear-gradient(
-      90deg,
-      #e5e5e5,
-      #c1daff,
-      #6490f6,
-      #c1daff,
-      #e5e5e5
-    );
+    background: linear-gradient(90deg,
+            #e5e5e5,
+            #c1daff,
+            #6490f6,
+            #c1daff,
+            #e5e5e5);
     border-radius: 4px;
-    margin: 12px auto; 
+    margin: 12px auto;
     cursor: pointer;
-  }
-  
-  #progress-bar::-webkit-slider-thumb {
+}
+
+#progress-bar::-webkit-slider-thumb {
     appearance: none;
     background: #e5e5e5;
     width: 15px;
     height: 15px;
     border-radius: 50%;
-  }
-  @media (max-width: 767px) {
-   
+}
+
+@media (max-width: 767px) {
+
     .controls {
-      column-gap: 12px; 
+        column-gap: 15px;
+        padding-right: 60px;
     }
-  
+
     .controls i {
-      font-size: 1.2rem; 
+        font-size: 1.5rem;
     }
+
     #playPauseBtn {
         width: 38px;
-        height:38px !important;
+        height: 38px !important;
         font-size: 1rem;
-      }
-  
+    }
+
     .volume {
-      gap: 3px; 
+        gap: 3px;
     }
-  
+
     .volume i {
-      font-size: 1rem; 
+        font-size: 1.5rem;
     }
-  
+
     .volume input {
-      width: 45px; 
+        margin-left: 5px;
+        width: 55px;
     }
-  
+
     #progress-bar {
-      width: 85%; 
+        width: 85%;
     }
-  }
+}
