@@ -19,7 +19,7 @@ const MusicPlayer = () => {
   const [isShuffle, setIsShuffle] = useState(false);
   const [volume, setVolume] = useState(100);
   const [progress, setProgress] = useState(0);
-  const [isMuted, setIsMuted] = useState(false); // Add this line
+  const [isMuted, setIsMuted] = useState(false);
 
   const audioRef = useRef(null);
   const songRowRefs = useRef([]);
@@ -82,7 +82,7 @@ const MusicPlayer = () => {
     setVolume(newVolume);
     audioRef.current.volume = newVolume / 100;
     if (isMuted) {
-      setIsMuted(false); // Unmute when volume is adjusted
+      setIsMuted(false);
     }
   };
 
@@ -100,10 +100,10 @@ const MusicPlayer = () => {
 
   const toggleMute = () => {
     if (isMuted) {
-      // Unmute and restore previous volume
+
       audioRef.current.volume = volume / 100;
     } else {
-      // Mute and save current volume
+
       audioRef.current.volume = 0;
     }
     setIsMuted(!isMuted);
@@ -163,11 +163,11 @@ const MusicPlayer = () => {
           </div>
         </div>
 
-        {/* Player Controls */}
+        { }
         <div className="player">
           <audio
             ref={audioRef}
-            src={`path/to/your/audio/${songs[activeIndex].title}.mp3`} 
+            src={`path/to/your/audio/${songs[activeIndex].title}.mp3`}
             onTimeUpdate={handleTimeUpdate}
           ></audio>
 
@@ -191,7 +191,7 @@ const MusicPlayer = () => {
                 id="volume-range"
                 min="0"
                 max="100"
-                value={isMuted ? 0 : volume} // Set volume to 0 when muted
+                value={isMuted ? 0 : volume}
                 onChange={handleVolumeChange}
               />
             </div>
