@@ -1,3 +1,24 @@
+:root {
+    --primary-clr: #6490f6;
+    --scrollbar-track: rgb(79, 78, 78);
+    --scrollbar-thumb: rgb(116, 116, 116);
+    --player-container-bg: rgba(53, 54, 72, 0.2);
+    --white: #ffffff;
+    --white-transparent: rgba(255, 255, 255, 0.5);
+    --white-semi-transparent: rgba(255, 255, 255, 0.2);
+    --white-mostly-transparent: rgba(255, 255, 255, 0.6);
+    --black-transparent: rgba(0, 0, 0, 0.1);
+    --card-bg: #d3d2d6;
+    --dark-gray: #333;
+    --white-light-transparent: rgba(255, 255, 255, 0.7);
+    --white-mostly-opaque: rgba(255, 255, 255, 0.9);
+    --lightest-gray: #f6f6f6;
+    --blue-bubble: rgba(100, 144, 246, 0.7);
+    --blue-bubble-glow: rgba(100, 144, 246, 0.8);
+    --pink-bubble: rgba(233, 98, 135, 0.7);
+    --pink-bubble-glow: rgba(233, 98, 135, 0.8);
+}
+
 .music-player {
     background-image: url("../assets/background-img.jpg");
     background-size: cover;
@@ -13,13 +34,14 @@
     width: 90vw;
     height: 80vh;
     padding: 10px;
-    background: rgba(53, 54, 72, 0.2);
+    background: var(--player-container-bg);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.5);
+    border: 1px solid var(--white-transparent);
     border-radius: 15px;
-    box-shadow: 0 0.5px 0 1px rgba(255, 255, 255, 0.2) inset,
-        0 1px 0 0 rgba(255, 255, 255, 0.6) inset, 0 4px 16px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0.5px 0 1px var(--white-semi-transparent) inset,
+        0 1px 0 0 var(--white-mostly-transparent) inset, 
+        0 4px 16px var(--black-transparent);
     position: relative;
     overflow: hidden;
     display: flex;
@@ -49,9 +71,10 @@
     display: grid;
     grid-template-rows: minmax(0, 4fr) auto;
     border-radius: 12px;
-    background: #d3d2d6;
-    box-shadow: 0 0.5px 0 1px rgba(255, 255, 255, 0.2) inset,
-    0 1px 0 0 rgba(255, 255, 255, 0.6) inset, 0 4px 16px rgba(0, 0, 0, 0.1);
+    background: var(--card-bg);
+    box-shadow: 0 0.5px 0 1px var(--white-semi-transparent) inset,
+        0 1px 0 0 var(--white-mostly-transparent) inset, 
+        0 4px 16px var(--black-transparent);
     padding: 15px;
     user-select: none;
     height: 100%;
@@ -72,7 +95,7 @@
     align-items: center;
     font-family: "Permanent Marker", serif;
     font-size: 1.4rem;
-    color: #333;
+    color: var(--dark-gray);
     text-align: center;
     padding: 5px 10px;
     margin: 0;
@@ -89,26 +112,39 @@
     justify-content: flex-start;
     gap: 10px;
     padding: 0 20px;
-    color: white;
+    color: var(--white);
     overflow-y: auto;
     height: 100%;
 }
+
 .controls-column::-webkit-scrollbar {
-    display: none; 
+    width: 7px;
 }
 
+.controls-column::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 0.3rem var(--scrollbar-track);
+    border-radius: 40px;
+    margin: 18px 0;
+}
+
+.controls-column::-webkit-scrollbar-thumb {
+    box-shadow: inset 0 0 0.5rem var(--scrollbar-thumb);
+    background-color: var(--primary-clr);
+    outline: none;
+    border-radius: 40px;
+}
 
 .song-row {
     display: flex;
     align-items: center;
     padding: 15px 20px;
     transition: background 0.3s ease;
-    border-bottom: 2px solid #6490f6;
+    border-bottom: 2px solid var(--primary-clr);
     flex-shrink: 0;
 }
 
 .song-row.active-song {
-    background: rgba(255, 255, 255, 0.2);
+    background: var(--white-semi-transparent);
     border-radius: 5px;
 }
 
@@ -129,14 +165,14 @@
 .song-title-row {
     font-family: "Roboto", sans-serif;
     font-size: 1.2rem;
-    color: white;
+    color: var(--white);
     margin-bottom: 12px;
 }
 
 .singer-name {
     font-family: "Roboto", sans-serif;
     font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--white-light-transparent);
 }
 
 .song-meta {
@@ -148,22 +184,22 @@
 .song-duration {
     font-family: "Roboto", sans-serif;
     font-size: 1rem;
-    color: rgba(255, 255, 255, 0.9);
+    color: var(--white-mostly-opaque);
 }
 
 .heart-icon {
     font-size: 1rem;
-    color: white;
+    color: var(--white);
     cursor: pointer;
     transition: color 0.3s ease;
 }
 
 .heart-icon:hover {
-    color: #f6f6f6;
+    color: var(--lightest-gray);
 }
 
 .heart-icon.fas {
-    color: #f6f6f6;
+    color: var(--lightest-gray);
 }
 
 .bubble {
@@ -180,27 +216,35 @@
 .blue-bubble {
     top: 2%;
     left: -75px;
-    background: rgba(100, 144, 246, 0.7);
-    box-shadow: 0 0 40px rgba(100, 144, 246, 0.8);
+    background: var(--blue-bubble);
+    box-shadow: 0 0 40px var(--blue-bubble-glow);
     animation: moveBubbleRight 13s infinite alternate;
 }
 
 .pink-bubble {
     bottom: 2%;
     right: -75px;
-    background: rgba(233, 98, 135, 0.7);
-    box-shadow: 0 0 40px rgba(233, 98, 135, 0.8);
+    background: var(--pink-bubble);
+    box-shadow: 0 0 40px var(--pink-bubble-glow);
     animation: moveBubbleLeft 13s infinite alternate;
 }
 
 @keyframes moveBubbleRight {
-    0% { left: -75px; }
-    100% { left: calc(100% - 75px); }
+    0% {
+        left: -75px;
+    }
+    100% {
+        left: calc(100% - 75px);
+    }
 }
 
 @keyframes moveBubbleLeft {
-    0% { right: -75px; }
-    100% { right: calc(100% - 75px); }
+    0% {
+        right: -75px;
+    }
+    100% {
+        right: calc(100% - 75px);
+    }
 }
 
 @media (max-width: 767px) {
@@ -286,12 +330,20 @@
     }
 
     @keyframes moveBubbleRight {
-        0% { left: -50px; }
-        100% { left: calc(100% - 50px); }
+        0% {
+            left: -50px;
+        }
+        100% {
+            left: calc(100% - 50px);
+        }
     }
 
     @keyframes moveBubbleLeft {
-        0% { right: -50px; }
-        100% { right: calc(100% - 50px); }
+        0% {
+            right: -50px;
+        }
+        100% {
+            right: calc(100% - 50px);
+        }
     }
 }

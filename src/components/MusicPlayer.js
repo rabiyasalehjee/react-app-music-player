@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { EffectCards } from "swiper/modules";
 import "swiper/css";
@@ -10,14 +10,13 @@ const MusicPlayer = () => {
     { id: 1, title: "Dreamy Nights", singer: "Luna Vox", image: "card-img-1.jpg", duration: "3:45", isFavorite: false },
     { id: 2, title: "Midnight Groove", singer: "Stellar Beats", image: "card-img-2.jpg", duration: "4:12", isFavorite: false },
     { id: 3, title: "Summer Breeze", singer: "Solar Tunes", image: "card-img-3.jpg", duration: "3:30", isFavorite: false },
-    { id: 4, title: "Midnight Groove", singer: "Echo Pulse", image: "card-img-4.jpg", duration: "4:00", isFavorite: false },
-    { id: 5, title: "Midnight Groove", singer: "Echo Pulse", image: "card-img-4.jpg", duration: "4:00", isFavorite: false },
-    { id: 6, title: "Midnight Groove", singer: "Echo Pulse", image: "card-img-4.jpg", duration: "4:00", isFavorite: false },
-    { id: 7, title: "Midnight Groove", singer: "Echo Pulse", image: "card-img-4.jpg", duration: "4:00", isFavorite: false },
-    { id: 8, title: "Midnight Groove", singer: "Echo Pulse", image: "card-img-4.jpg", duration: "4:00", isFavorite: false },
+    { id: 4, title: "Starlight Serenade", singer: "Echo Pulse", image: "card-img-4.jpg", duration: "4:00", isFavorite: false },
+    { id: 5, title: "Neon Dreams", singer: "Synthwave Collective", image: "card-img-5.jpg", duration: "4:10", isFavorite: false },
   ]);
 
-  const [activeIndex, setActiveIndex] = useState(0); 
+  const [activeIndex, setActiveIndex] = useState(0);
+  const songRowRefs = useRef([]); 
+  const swiperRef = useRef(null); 
 
   const importAll = (r) => {
     let images = {};
@@ -33,6 +32,29 @@ const MusicPlayer = () => {
     setSongs(songs.map(song =>
       song.id === id ? { ...song, isFavorite: !song.isFavorite } : song
     ));
+  };
+
+  useEffect(() => {
+    const activeRow = songRowRefs.current[activeIndex];
+    if (activeRow) {
+      const timeoutId = setTimeout(() => {
+        activeRow.scrollIntoView({
+          behavior: "smooth",
+          block: "nearest",
+          inline: "nearest"
+        });
+      }, 300); 
+
+      return () => clearTimeout(timeoutId);
+    } else {
+      console.warn(`No ref found for index ${activeIndex}`); 
+    }
+  }, [activeIndex]);
+
+  const handleSlideChange = (swiper) => {
+    setTimeout(() => {
+      setActiveIndex(swiper.activeIndex);
+    }, 100); 
   };
 
   return (
@@ -54,9 +76,10 @@ const MusicPlayer = () => {
               speed={700}
               initialSlide={0}
               className="swiper"
-              onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)} 
+              onSwiper={(swiper) => (swiperRef.current = swiper)} 
+              onSlideChange={handleSlideChange} 
             >
-              {songs.map((song) => (
+              {songs.map((song, index) => (
                 <SwiperSlide key={song.id} className="swiper-slide">
                   <img src={images[song.image]} alt={song.title} className="card-image" />
                   <div className="song-title">{song.title}</div>
@@ -68,7 +91,8 @@ const MusicPlayer = () => {
             {songs.map((song, index) => (
               <div
                 key={song.id}
-                className={`song-row ${index === activeIndex ? 'active-song' : ''}`} 
+                ref={(el) => (songRowRefs.current[index] = el)}
+                className={`song-row ${index === activeIndex ? 'active-song' : ''}`}
               >
                 <img src={images[song.image]} alt={song.title} className="row-thumbnail" />
                 <div className="song-info">
