@@ -5,13 +5,21 @@ import "swiper/css";
 import "swiper/css/effect-cards";
 import "./MusicPlayer.css";
 
+import song1 from "../assets/songs/mp3-1.mp3";
+import song2 from "../assets/songs/mp3-2.mp3";
+import song3 from "../assets/songs/mp3-3.mp3";
+import song4 from "../assets/songs/mp3-4.mp3";
+import song5 from "../assets/songs/mp3-5.mp3";
+
 const MusicPlayer = () => {
+  const songFiles = [song1, song2, song3, song4, song5]; 
+
   const [songs, setSongs] = useState([
-    { id: 1, title: "Dreamy Nights", singer: "Luna Vox", image: "card-img-1.jpg", duration: "3:45", isFavorite: false },
-    { id: 2, title: "Midnight Groove", singer: "Stellar Beats", image: "card-img-2.jpg", duration: "4:12", isFavorite: false },
-    { id: 3, title: "Summer Breeze", singer: "Solar Tunes", image: "card-img-3.jpg", duration: "3:30", isFavorite: true },
-    { id: 4, title: "Starlight Serenade", singer: "Echo Pulse", image: "card-img-4.jpg", duration: "4:00", isFavorite: false },
-    { id: 5, title: "Neon Dreams", singer: "Synthwave Collective", image: "card-img-5.jpg", duration: "4:10", isFavorite: false },
+    { id: 1, title: "Dreamy Nights", singer: "Luna Vox", image: "card-img-1.jpg", duration: "3:45", isFavorite: false, src: songFiles[0] },
+    { id: 2, title: "Midnight Groove", singer: "Stellar Beats", image: "card-img-2.jpg", duration: "4:12", isFavorite: false, src: songFiles[1] },
+    { id: 3, title: "Summer Breeze", singer: "Solar Tunes", image: "card-img-3.jpg", duration: "3:30", isFavorite: true, src: songFiles[2] },
+    { id: 4, title: "Starlight Serenade", singer: "Echo Pulse", image: "card-img-4.jpg", duration: "4:00", isFavorite: false, src: songFiles[3] },
+    { id: 5, title: "Neon Dreams", singer: "Synthwave Collective", image: "card-img-5.jpg", duration: "4:10", isFavorite: false, src: songFiles[4] },
   ]);
 
   const [activeIndex, setActiveIndex] = useState(0);
@@ -21,7 +29,7 @@ const MusicPlayer = () => {
   const [progress, setProgress] = useState(0);
   const [isMuted, setIsMuted] = useState(false);
 
-  const audioRef = useRef(null);
+  const audioRef = useRef(new Audio(songs[0].src)); 
   const songRowRefs = useRef([]);
   const swiperRef = useRef(null);
 
@@ -35,14 +43,14 @@ const MusicPlayer = () => {
 
   const images = importAll(require.context("../assets", false, /\.(png|jpe?g|svg)$/));
 
-  const toggleFavorite = (id) => {
-    setSongs(songs.map(song =>
-      song.id === id ? { ...song, isFavorite: !song.isFavorite } : song
-    ));
-  };
-
-  
   useEffect(() => {
+    const audio = audioRef.current;
+    audio.src = songs[activeIndex].src;
+    audio.load(); 
+    if (isPlaying) {
+      audio.play().catch((error) => console.error("Error playing audio:", error));
+    }
+
     if (swiperRef.current) {
       swiperRef.current.slideTo(activeIndex);
     }
@@ -53,15 +61,31 @@ const MusicPlayer = () => {
         activeRow.scrollIntoView({
           behavior: "smooth",
           block: "nearest",
-          inline: "nearest"
+          inline: "nearest",
         });
       }, 300);
-
       return () => clearTimeout(timeoutId);
-    } else {
-      console.warn(`No ref found for index ${activeIndex}`);
     }
   }, [activeIndex]);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    audio.volume = isMuted ? 0 : volume / 100;
+    isPlaying ? audio.play().catch((e) => console.error(e)) : audio.pause();
+
+    const handleEnded = () => {
+      
+      setActiveIndex((prev) => (prev < songs.length - 1 ? prev + 1 : 0));
+    };
+    audio.addEventListener("ended", handleEnded);
+    return () => audio.removeEventListener("ended", handleEnded);
+  }, [isPlaying, volume, isMuted, songs.length]);
+
+  const toggleFavorite = (id) => {
+    setSongs(songs.map((song) =>
+      song.id === id ? { ...song, isFavorite: !song.isFavorite } : song
+    ));
+  };
 
   const handleSlideChange = (swiper) => {
     setTimeout(() => {
@@ -69,31 +93,28 @@ const MusicPlayer = () => {
     }, 100);
   };
 
-  
   const handleRowClick = (index) => {
     setActiveIndex(index);
+    setIsPlaying(true); 
   };
 
   const togglePlayPause = () => {
-    if (isPlaying) {
-      audioRef.current.pause();
-    } else {
-      audioRef.current.play();
-    }
     setIsPlaying(!isPlaying);
   };
 
   const handleShuffle = () => {
     setIsShuffle(!isShuffle);
+    if (!isShuffle) {
+      const shuffledSongs = [...songs].sort(() => Math.random() - 0.5);
+      setSongs(shuffledSongs);
+      setActiveIndex(0); 
+    }
   };
 
   const handleVolumeChange = (e) => {
     const newVolume = e.target.value;
     setVolume(newVolume);
-    audioRef.current.volume = newVolume / 100;
-    if (isMuted) {
-      setIsMuted(false);
-    }
+    setIsMuted(false);
   };
 
   const handleProgressChange = (e) => {
@@ -104,16 +125,11 @@ const MusicPlayer = () => {
 
   const handleTimeUpdate = () => {
     const currentTime = audioRef.current.currentTime;
-    const duration = audioRef.current.duration;
-    setProgress((currentTime / duration) * 100);
+    const duration = audioRef.current.duration || 0;
+    setProgress((currentTime / duration) * 100 || 0);
   };
 
   const toggleMute = () => {
-    if (isMuted) {
-      audioRef.current.volume = volume / 100;
-    } else {
-      audioRef.current.volume = 0;
-    }
     setIsMuted(!isMuted);
   };
 
@@ -129,17 +145,14 @@ const MusicPlayer = () => {
               effect="cards"
               grabCursor={true}
               modules={[EffectCards]}
-              cardsEffect={{
-                perSlideOffset: 9,
-                perSlideRotate: 3,
-              }}
+              cardsEffect={{ perSlideOffset: 9, perSlideRotate: 3 }}
               speed={700}
               initialSlide={0}
               className="swiper"
               onSwiper={(swiper) => (swiperRef.current = swiper)}
               onSlideChange={handleSlideChange}
             >
-              {songs.map((song, index) => (
+              {songs.map((song) => (
                 <SwiperSlide key={song.id} className="swiper-slide">
                   <img src={images[song.image]} alt={song.title} className="card-image" />
                   <div className="song-title">{song.title}</div>
@@ -152,9 +165,9 @@ const MusicPlayer = () => {
               <div
                 key={song.id}
                 ref={(el) => (songRowRefs.current[index] = el)}
-                className={`song-row ${index === activeIndex ? 'active-song' : ''}`}
-                onClick={() => handleRowClick(index)} 
-                style={{ cursor: "pointer" }} 
+                className={`song-row ${index === activeIndex ? "active-song" : ""}`}
+                onClick={() => handleRowClick(index)}
+                style={{ cursor: "pointer" }}
               >
                 <img src={images[song.image]} alt={song.title} className="row-thumbnail" />
                 <div className="song-info">
@@ -164,9 +177,9 @@ const MusicPlayer = () => {
                 <div className="song-meta">
                   <span className="song-duration">{song.duration}</span>
                   <i
-                    className={`heart-icon ${song.isFavorite ? 'fas fa-heart' : 'far fa-heart'}`}
+                    className={`heart-icon ${song.isFavorite ? "fas fa-heart" : "far fa-heart"}`}
                     onClick={(e) => {
-                      e.stopPropagation(); 
+                      e.stopPropagation();
                       toggleFavorite(song.id);
                     }}
                   ></i>
@@ -177,25 +190,27 @@ const MusicPlayer = () => {
         </div>
 
         <div className="player">
-          <audio
-            ref={audioRef}
-            src={`path/to/your/audio/${songs[activeIndex].title}.mp3`}
-            onTimeUpdate={handleTimeUpdate}
-          ></audio>
+          <audio ref={audioRef} onTimeUpdate={handleTimeUpdate} />
 
           <div className="controls">
             <i
-              className={`fa-solid fa-shuffle ${isShuffle ? 'active' : ''}`}
+              className={`fa-solid fa-shuffle ${isShuffle ? "active" : ""}`}
               onClick={handleShuffle}
             ></i>
-            <i className="fa-solid fa-backward" onClick={() => setActiveIndex((prev) => (prev > 0 ? prev - 1 : songs.length - 1))}></i>
+            <i
+              className="fa-solid fa-backward"
+              onClick={() => setActiveIndex((prev) => (prev > 0 ? prev - 1 : songs.length - 1))}
+            ></i>
             <button id="playPauseBtn" onClick={togglePlayPause}>
-              <i className={`fa-solid ${isPlaying ? 'fa-pause' : 'fa-play'}`}></i>
+              <i className={`fa-solid ${isPlaying ? "fa-pause" : "fa-play"}`}></i>
             </button>
-            <i className="fa-solid fa-forward" onClick={() => setActiveIndex((prev) => (prev < songs.length - 1 ? prev + 1 : 0))}></i>
+            <i
+              className="fa-solid fa-forward"
+              onClick={() => setActiveIndex((prev) => (prev < songs.length - 1 ? prev + 1 : 0))}
+            ></i>
             <div className="volume">
               <i
-                className={`fa-solid ${isMuted ? 'fa-volume-mute' : 'fa-volume-high'}`}
+                className={`fa-solid ${isMuted ? "fa-volume-mute" : "fa-volume-high"}`}
                 onClick={toggleMute}
               ></i>
               <input
