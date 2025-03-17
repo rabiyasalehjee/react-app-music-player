@@ -12,7 +12,7 @@ import song4 from "../assets/songs/mp3-4.mp3";
 import song5 from "../assets/songs/mp3-5.mp3";
 
 const MusicPlayer = () => {
-  const songFiles = [song1, song2, song3, song4, song5]; 
+  const songFiles = [song1, song2, song3, song4, song5];
 
   const [songs, setSongs] = useState([
     { id: 1, title: "Dreamy Nights", singer: "Luna Vox", image: "card-img-1.jpg", duration: "3:45", isFavorite: false, src: songFiles[0] },
@@ -23,13 +23,13 @@ const MusicPlayer = () => {
   ]);
 
   const [activeIndex, setActiveIndex] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true); // Start as true for auto-play on load
   const [isShuffle, setIsShuffle] = useState(false);
   const [volume, setVolume] = useState(100);
   const [progress, setProgress] = useState(0);
   const [isMuted, setIsMuted] = useState(false);
 
-  const audioRef = useRef(new Audio(songs[0].src)); 
+  const audioRef = useRef(new Audio(songs[0].src));
   const songRowRefs = useRef([]);
   const swiperRef = useRef(null);
 
@@ -43,12 +43,21 @@ const MusicPlayer = () => {
 
   const images = importAll(require.context("../assets", false, /\.(png|jpe?g|svg)$/));
 
+  // Handle initial playback and audio source changes
   useEffect(() => {
     const audio = audioRef.current;
     audio.src = songs[activeIndex].src;
-    audio.load(); 
-    if (isPlaying) {
-      audio.play().catch((error) => console.error("Error playing audio:", error));
+    audio.load();
+
+    if (isPlaying || isShuffle) {
+      audio.play()
+        .then(() => {
+          setIsPlaying(true);
+        })
+        .catch((error) => {
+          console.error("Autoplay prevented:", error);
+          setIsPlaying(false);
+        });
     }
 
     if (swiperRef.current) {
@@ -66,20 +75,28 @@ const MusicPlayer = () => {
       }, 300);
       return () => clearTimeout(timeoutId);
     }
-  }, [activeIndex]);
+  }, [activeIndex, isShuffle, songs]);
 
+  // Handle playback state changes
   useEffect(() => {
     const audio = audioRef.current;
     audio.volume = isMuted ? 0 : volume / 100;
-    isPlaying ? audio.play().catch((e) => console.error(e)) : audio.pause();
+
+    if (!isShuffle) {
+      if (isPlaying) {
+        audio.play().catch((e) => console.error("Error playing audio:", e));
+      } else {
+        audio.pause();
+      }
+    }
 
     const handleEnded = () => {
-      
       setActiveIndex((prev) => (prev < songs.length - 1 ? prev + 1 : 0));
+      setIsPlaying(true); // Ensure playback continues after song ends
     };
     audio.addEventListener("ended", handleEnded);
     return () => audio.removeEventListener("ended", handleEnded);
-  }, [isPlaying, volume, isMuted, songs.length]);
+  }, [isPlaying, volume, isMuted, songs.length, isShuffle]);
 
   const toggleFavorite = (id) => {
     setSongs(songs.map((song) =>
@@ -88,14 +105,13 @@ const MusicPlayer = () => {
   };
 
   const handleSlideChange = (swiper) => {
-    setTimeout(() => {
-      setActiveIndex(swiper.activeIndex);
-    }, 100);
+    const newIndex = swiper.activeIndex;
+    setActiveIndex(newIndex);
   };
 
   const handleRowClick = (index) => {
     setActiveIndex(index);
-    setIsPlaying(true); 
+    setIsPlaying(true);
   };
 
   const togglePlayPause = () => {
@@ -103,11 +119,13 @@ const MusicPlayer = () => {
   };
 
   const handleShuffle = () => {
-    setIsShuffle(!isShuffle);
-    if (!isShuffle) {
+    const newShuffleState = !isShuffle;
+    setIsShuffle(newShuffleState);
+    if (newShuffleState) {
       const shuffledSongs = [...songs].sort(() => Math.random() - 0.5);
       setSongs(shuffledSongs);
-      setActiveIndex(0); 
+      setActiveIndex(0);
+      setIsPlaying(true);
     }
   };
 
@@ -199,14 +217,20 @@ const MusicPlayer = () => {
             ></i>
             <i
               className="fa-solid fa-backward"
-              onClick={() => setActiveIndex((prev) => (prev > 0 ? prev - 1 : songs.length - 1))}
+              onClick={() => {
+                setActiveIndex((prev) => (prev > 0 ? prev - 1 : songs.length - 1));
+                setIsPlaying(true); // Start playback when going backward
+              }}
             ></i>
             <button id="playPauseBtn" onClick={togglePlayPause}>
               <i className={`fa-solid ${isPlaying ? "fa-pause" : "fa-play"}`}></i>
             </button>
             <i
               className="fa-solid fa-forward"
-              onClick={() => setActiveIndex((prev) => (prev < songs.length - 1 ? prev + 1 : 0))}
+              onClick={() => {
+                setActiveIndex((prev) => (prev < songs.length - 1 ? prev + 1 : 0));
+                setIsPlaying(true); // Start playback when going forward
+              }}
             ></i>
             <div className="volume">
               <i
