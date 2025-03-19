@@ -23,7 +23,7 @@ const MusicPlayer = () => {
   ]);
 
   const [activeIndex, setActiveIndex] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(true); // Start as true for auto-play on load
+  const [isPlaying, setIsPlaying] = useState(true); 
   const [isShuffle, setIsShuffle] = useState(false);
   const [volume, setVolume] = useState(100);
   const [progress, setProgress] = useState(0);
@@ -43,7 +43,7 @@ const MusicPlayer = () => {
 
   const images = importAll(require.context("../assets", false, /\.(png|jpe?g|svg)$/));
 
-  // Handle initial playback and audio source changes
+  
   useEffect(() => {
     const audio = audioRef.current;
     audio.src = songs[activeIndex].src;
@@ -77,7 +77,7 @@ const MusicPlayer = () => {
     }
   }, [activeIndex, isShuffle, songs]);
 
-  // Handle playback state changes
+  
   useEffect(() => {
     const audio = audioRef.current;
     audio.volume = isMuted ? 0 : volume / 100;
@@ -92,7 +92,7 @@ const MusicPlayer = () => {
 
     const handleEnded = () => {
       setActiveIndex((prev) => (prev < songs.length - 1 ? prev + 1 : 0));
-      setIsPlaying(true); // Ensure playback continues after song ends
+      setIsPlaying(true); 
     };
     audio.addEventListener("ended", handleEnded);
     return () => audio.removeEventListener("ended", handleEnded);
@@ -219,7 +219,7 @@ const MusicPlayer = () => {
               className="fa-solid fa-backward"
               onClick={() => {
                 setActiveIndex((prev) => (prev > 0 ? prev - 1 : songs.length - 1));
-                setIsPlaying(true); // Start playback when going backward
+                setIsPlaying(true); 
               }}
             ></i>
             <button id="playPauseBtn" onClick={togglePlayPause}>
@@ -229,7 +229,7 @@ const MusicPlayer = () => {
               className="fa-solid fa-forward"
               onClick={() => {
                 setActiveIndex((prev) => (prev < songs.length - 1 ? prev + 1 : 0));
-                setIsPlaying(true); // Start playback when going forward
+                setIsPlaying(true); 
               }}
             ></i>
             <div className="volume">
