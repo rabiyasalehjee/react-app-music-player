@@ -23,7 +23,7 @@ const MusicPlayer = () => {
   ]);
 
   const [activeIndex, setActiveIndex] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(true); 
+  const [isPlaying, setIsPlaying] = useState(true);
   const [isShuffle, setIsShuffle] = useState(false);
   const [volume, setVolume] = useState(100);
   const [progress, setProgress] = useState(0);
@@ -43,7 +43,33 @@ const MusicPlayer = () => {
 
   const images = importAll(require.context("../assets", false, /\.(png|jpe?g|svg)$/));
 
-  
+  const formatDuration = (seconds) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = Math.floor(seconds % 60);
+    return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
+  };
+
+  useEffect(() => {
+    const loadDurations = async () => {
+      const updatedSongs = await Promise.all(
+        songs.map(async (song) => {
+          const audio = new Audio(song.src);
+          return new Promise((resolve) => {
+            audio.onloadedmetadata = () => {
+              resolve({
+                ...song,
+                duration: formatDuration(audio.duration)
+              });
+            };
+            audio.onerror = () => resolve(song);
+          });
+        })
+      );
+      setSongs(updatedSongs);
+    };
+    loadDurations();
+  }, []);
+
   useEffect(() => {
     const audio = audioRef.current;
     audio.src = songs[activeIndex].src;
@@ -77,7 +103,6 @@ const MusicPlayer = () => {
     }
   }, [activeIndex, isShuffle, songs]);
 
-  
   useEffect(() => {
     const audio = audioRef.current;
     audio.volume = isMuted ? 0 : volume / 100;
@@ -92,7 +117,7 @@ const MusicPlayer = () => {
 
     const handleEnded = () => {
       setActiveIndex((prev) => (prev < songs.length - 1 ? prev + 1 : 0));
-      setIsPlaying(true); 
+      setIsPlaying(true);
     };
     audio.addEventListener("ended", handleEnded);
     return () => audio.removeEventListener("ended", handleEnded);
@@ -219,7 +244,7 @@ const MusicPlayer = () => {
               className="fa-solid fa-backward"
               onClick={() => {
                 setActiveIndex((prev) => (prev > 0 ? prev - 1 : songs.length - 1));
-                setIsPlaying(true); 
+                setIsPlaying(true);
               }}
             ></i>
             <button id="playPauseBtn" onClick={togglePlayPause}>
@@ -229,7 +254,7 @@ const MusicPlayer = () => {
               className="fa-solid fa-forward"
               onClick={() => {
                 setActiveIndex((prev) => (prev < songs.length - 1 ? prev + 1 : 0));
-                setIsPlaying(true); 
+                setIsPlaying(true);
               }}
             ></i>
             <div className="volume">
